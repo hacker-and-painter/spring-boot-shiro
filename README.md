@@ -26,6 +26,7 @@ localhost:8080/require_permission
 
 ## 序言
 
+
 如果想要直接体验，直接`clone`项目，运行`mvn spring-boot:run`命令即可进行访问。网址规则自行看教程后面。
 
 如果想了解Spring Security可以看
@@ -36,10 +37,10 @@ localhost:8080/require_permission
 
 ## 特性
 
-- 完全使用了Shiro的注解配置，保持高度的灵活性。
-- 放弃Cookie,Session,使用JWT进行鉴权，完全实现无状态鉴权。
-- JWT密钥支持过期时间。
-- 对跨域提供支持
+* 完全使用了Shiro的注解配置，保持高度的灵活性。
+* 放弃Cookie,Session,使用JWT进行鉴权，完全实现无状态鉴权。
+* JWT密钥支持过期时间。
+* 对跨域提供支持
 
 ## 准备工作
 
@@ -81,61 +82,58 @@ localhost:8080/require_permission
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-```
-<groupId>org.inlighting</groupId>
-<artifactId>shiro-study</artifactId>
-<version>1.0-SNAPSHOT</version>
+    <groupId>org.inlighting</groupId>
+    <artifactId>shiro-study</artifactId>
+    <version>1.0-SNAPSHOT</version>
 
-<dependencies>
+    <dependencies>
 
-    <dependency>
-        <groupId>org.apache.shiro</groupId>
-        <artifactId>shiro-spring</artifactId>
-        <version>1.3.2</version>
-    </dependency>
-    <dependency>
-        <groupId>com.auth0</groupId>
-        <artifactId>java-jwt</artifactId>
-        <version>3.2.0</version>
-    </dependency>
-    <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-web</artifactId>
-        <version>1.5.8.RELEASE</version>
-    </dependency>
-</dependencies>
-
-<build>
-    <plugins>
-       <!-- Srping Boot 打包工具 -->
-        <plugin>
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-spring</artifactId>
+            <version>1.3.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.auth0</groupId>
+            <artifactId>java-jwt</artifactId>
+            <version>3.2.0</version>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-maven-plugin</artifactId>
-            <version>1.5.7.RELEASE</version>
-            <executions>
-                <execution>
-                    <goals>
-                        <goal>repackage</goal>
-                    </goals>
-                </execution>
-            </executions>
-        </plugin>
-        <!-- 指定JDK编译版本 -->
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-compiler-plugin</artifactId>
-            <configuration>
-                <source>1.8</source>
-                <target>1.8</target>
-                <encoding>UTF-8</encoding>
-            </configuration>
-        </plugin>
-    </plugins>
-</build>
-```
+            <artifactId>spring-boot-starter-web</artifactId>
+            <version>1.5.8.RELEASE</version>
+        </dependency>
+    </dependencies>
 
+    <build>
+        <plugins>
+        	<!-- Srping Boot 打包工具 -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>1.5.7.RELEASE</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- 指定JDK编译版本 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
-​```
+```
 
 注意指定JDK版本和编码
 
@@ -158,25 +156,22 @@ localhost:8080/require_permission
 @Component
 public class UserService {
 
-```
-public UserBean getUser(String username) {
-    // 没有此用户直接返回null
-    if (! DataSource.getData().containsKey(username))
-        return null;
+    public UserBean getUser(String username) {
+        // 没有此用户直接返回null
+        if (! DataSource.getData().containsKey(username))
+            return null;
 
-    UserBean user = new UserBean();
-    Map<String, String> detail = DataSource.getData().get(username);
+        UserBean user = new UserBean();
+        Map<String, String> detail = DataSource.getData().get(username);
 
-    user.setUsername(username);
-    user.setPassword(detail.get("password"));
-    user.setRole(detail.get("role"));
-    user.setPermission(detail.get("permission"));
-    return user;
+        user.setUsername(username);
+        user.setPassword(detail.get("password"));
+        user.setRole(detail.get("role"));
+        user.setPermission(detail.get("permission"));
+        return user;
+    }
 }
 ```
-
-}
-​```
 
 ***UserBean.java***
 
@@ -184,48 +179,45 @@ public UserBean getUser(String username) {
 public class UserBean {
     private String username;
 
+    private String password;
+
+    private String role;
+
+    private String permission;
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public String getPermission() {
+        return permission;
+    }
+
+    public void setPermission(String permission) {
+        this.permission = permission;
+    }
+}
 ```
-private String password;
-
-private String role;
-
-private String permission;
-
-public String getUsername() {
-    return username;
-}
-
-public void setUsername(String username) {
-    this.username = username;
-}
-
-public String getPassword() {
-    return password;
-}
-
-public void setPassword(String password) {
-    this.password = password;
-}
-
-public String getRole() {
-    return role;
-}
-
-public void setRole(String role) {
-    this.role = role;
-}
-
-public String getPermission() {
-    return permission;
-}
-
-public void setPermission(String permission) {
-    this.permission = permission;
-}
-```
-
-}
-​```
 
 ## 配置JWT
 
@@ -234,65 +226,62 @@ public void setPermission(String permission) {
 ```java
 public class JWTUtil {
 
+    // 过期时间5分钟
+    private static final long EXPIRE_TIME = 5*60*1000;
+
+    /**
+     * 校验token是否正确
+     * @param token 密钥
+     * @param secret 用户的密码
+     * @return 是否正确
+     */
+    public static boolean verify(String token, String username, String secret) {
+        try {
+            Algorithm algorithm = Algorithm.HMAC256(secret);
+            JWTVerifier verifier = JWT.require(algorithm)
+                    .withClaim("username", username)
+                    .build();
+            DecodedJWT jwt = verifier.verify(token);
+            return true;
+        } catch (Exception exception) {
+            return false;
+        }
+    }
+
+    /**
+     * 获得token中的信息无需secret解密也能获得
+     * @return token中包含的用户名
+     */
+    public static String getUsername(String token) {
+        try {
+            DecodedJWT jwt = JWT.decode(token);
+            return jwt.getClaim("username").asString();
+        } catch (JWTDecodeException e) {
+            return null;
+        }
+    }
+
+    /**
+     * 生成签名,5min后过期
+     * @param username 用户名
+     * @param secret 用户的密码
+     * @return 加密的token
+     */
+    public static String sign(String username, String secret) {
+        try {
+            Date date = new Date(System.currentTimeMillis()+EXPIRE_TIME);
+            Algorithm algorithm = Algorithm.HMAC256(secret);
+            // 附带username信息
+            return JWT.create()
+                    .withClaim("username", username)
+                    .withExpiresAt(date)
+                    .sign(algorithm);
+        } catch (UnsupportedEncodingException e) {
+            return null;
+        }
+    }
+}
 ```
-// 过期时间5分钟
-private static final long EXPIRE_TIME = 5*60*1000;
-
-/**
- * 校验token是否正确
- * @param token 密钥
- * @param secret 用户的密码
- * @return 是否正确
- */
-public static boolean verify(String token, String username, String secret) {
-    try {
-        Algorithm algorithm = Algorithm.HMAC256(secret);
-        JWTVerifier verifier = JWT.require(algorithm)
-                .withClaim("username", username)
-                .build();
-        DecodedJWT jwt = verifier.verify(token);
-        return true;
-    } catch (Exception exception) {
-        return false;
-    }
-}
-
-/**
- * 获得token中的信息无需secret解密也能获得
- * @return token中包含的用户名
- */
-public static String getUsername(String token) {
-    try {
-        DecodedJWT jwt = JWT.decode(token);
-        return jwt.getClaim("username").asString();
-    } catch (JWTDecodeException e) {
-        return null;
-    }
-}
-
-/**
- * 生成签名,5min后过期
- * @param username 用户名
- * @param secret 用户的密码
- * @return 加密的token
- */
-public static String sign(String username, String secret) {
-    try {
-        Date date = new Date(System.currentTimeMillis()+EXPIRE_TIME);
-        Algorithm algorithm = Algorithm.HMAC256(secret);
-        // 附带username信息
-        return JWT.create()
-                .withClaim("username", username)
-                .withExpiresAt(date)
-                .sign(algorithm);
-    } catch (UnsupportedEncodingException e) {
-        return null;
-    }
-}
-```
-
-}
-​```
 
 ## 构建URL
 
@@ -303,50 +292,46 @@ public static String sign(String username, String secret) {
 ```java
 public class ResponseBean {
     
+    // http 状态码
+    private int code;
 
+    // 返回信息
+    private String msg;
+
+    // 返回的数据
+    private Object data;
+
+    public ResponseBean(int code, String msg, Object data) {
+        this.code = code;
+        this.msg = msg;
+        this.data = data;
+    }
+
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
+    }
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
+    }
+
+    public Object getData() {
+        return data;
+    }
+
+    public void setData(Object data) {
+        this.data = data;
+    }
+}
 ```
-// http 状态码
-private int code;
-
-// 返回信息
-private String msg;
-
-// 返回的数据
-private Object data;
-
-public ResponseBean(int code, String msg, Object data) {
-    this.code = code;
-    this.msg = msg;
-    this.data = data;
-}
-
-public int getCode() {
-    return code;
-}
-
-public void setCode(int code) {
-    this.code = code;
-}
-
-public String getMsg() {
-    return msg;
-}
-
-public void setMsg(String msg) {
-    this.msg = msg;
-}
-
-public Object getData() {
-    return data;
-}
-
-public void setData(Object data) {
-    this.data = data;
-}
-```
-
-}
-​```
 
 ***自定义异常***
 
@@ -358,24 +343,21 @@ public class UnauthorizedException extends RuntimeException {
         super(msg);
     }
 
-```
-public UnauthorizedException() {
-    super();
+    public UnauthorizedException() {
+        super();
+    }
 }
 ```
-
-}
-​```
 
 ***URL结构***
 
-| URL                 | 作用                                           |
-| ------------------- | ---------------------------------------------- |
-| /login              | 登入                                           |
+| URL                 | 作用                      |
+| ------------------- | ----------------------- |
+| /login              | 登入                      |
 | /article            | 所有人都可以访问，但是用户与游客看到的内容不同 |
-| /require_auth       | 登入的用户才可以进行访问                       |
-| /require_role       | admin的角色用户才可以登入                      |
-| /require_permission | 拥有view和edit权限的用户才可以访问             |
+| /require_auth       | 登入的用户才可以进行访问            |
+| /require_role       | admin的角色用户才可以登入         |
+| /require_permission | 拥有view和edit权限的用户才可以访问   |
 
 ***Controller***
 
@@ -383,64 +365,61 @@ public UnauthorizedException() {
 @RestController
 public class WebController {
 
-```
-private static final Logger LOGGER = LogManager.getLogger(WebController.class);
+    private static final Logger LOGGER = LogManager.getLogger(WebController.class);
 
-private UserService userService;
+    private UserService userService;
 
-@Autowired
-public void setService(UserService userService) {
-    this.userService = userService;
-}
+    @Autowired
+    public void setService(UserService userService) {
+        this.userService = userService;
+    }
 
-@PostMapping("/login")
-public ResponseBean login(@RequestParam("username") String username,
-                          @RequestParam("password") String password) {
-    UserBean userBean = userService.getUser(username);
-    if (userBean.getPassword().equals(password)) {
-        return new ResponseBean(200, "Login success", JWTUtil.sign(username, password));
-    } else {
-        throw new UnauthorizedException();
+    @PostMapping("/login")
+    public ResponseBean login(@RequestParam("username") String username,
+                              @RequestParam("password") String password) {
+        UserBean userBean = userService.getUser(username);
+        if (userBean.getPassword().equals(password)) {
+            return new ResponseBean(200, "Login success", JWTUtil.sign(username, password));
+        } else {
+            throw new UnauthorizedException();
+        }
+    }
+
+    @GetMapping("/article")
+    public ResponseBean article() {
+        Subject subject = SecurityUtils.getSubject();
+        if (subject.isAuthenticated()) {
+            return new ResponseBean(200, "You are already logged in", null);
+        } else {
+            return new ResponseBean(200, "You are guest", null);
+        }
+    }
+
+    @GetMapping("/require_auth")
+    @RequiresAuthentication
+    public ResponseBean requireAuth() {
+        return new ResponseBean(200, "You are authenticated", null);
+    }
+
+    @GetMapping("/require_role")
+    @RequiresRoles("admin")
+    public ResponseBean requireRole() {
+        return new ResponseBean(200, "You are visiting require_role", null);
+    }
+
+    @GetMapping("/require_permission")
+    @RequiresPermissions(logical = Logical.AND, value = {"view", "edit"})
+    public ResponseBean requirePermission() {
+        return new ResponseBean(200, "You are visiting permission require edit,view", null);
+    }
+
+    @RequestMapping(path = "/401")
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ResponseBean unauthorized() {
+        return new ResponseBean(401, "Unauthorized", null);
     }
 }
-
-@GetMapping("/article")
-public ResponseBean article() {
-    Subject subject = SecurityUtils.getSubject();
-    if (subject.isAuthenticated()) {
-        return new ResponseBean(200, "You are already logged in", null);
-    } else {
-        return new ResponseBean(200, "You are guest", null);
-    }
-}
-
-@GetMapping("/require_auth")
-@RequiresAuthentication
-public ResponseBean requireAuth() {
-    return new ResponseBean(200, "You are authenticated", null);
-}
-
-@GetMapping("/require_role")
-@RequiresRoles("admin")
-public ResponseBean requireRole() {
-    return new ResponseBean(200, "You are visiting require_role", null);
-}
-
-@GetMapping("/require_permission")
-@RequiresPermissions(logical = Logical.AND, value = {"view", "edit"})
-public ResponseBean requirePermission() {
-    return new ResponseBean(200, "You are visiting permission require edit,view", null);
-}
-
-@RequestMapping(path = "/401")
-@ResponseStatus(HttpStatus.UNAUTHORIZED)
-public ResponseBean unauthorized() {
-    return new ResponseBean(401, "Unauthorized", null);
-}
 ```
-
-}
-​```
 
 ***处理框架异常***
 
@@ -450,37 +429,34 @@ public ResponseBean unauthorized() {
 @RestControllerAdvice
 public class ExceptionController {
 
-```
-// 捕捉shiro的异常
-@ResponseStatus(HttpStatus.UNAUTHORIZED)
-@ExceptionHandler(ShiroException.class)
-public ResponseBean handle401(ShiroException e) {
-    return new ResponseBean(401, e.getMessage(), null);
-}
-
-// 捕捉UnauthorizedException
-@ResponseStatus(HttpStatus.UNAUTHORIZED)
-@ExceptionHandler(UnauthorizedException.class)
-public ResponseBean handle401() {
-    return new ResponseBean(401, "Unauthorized", null);
-}
-
-// 捕捉其他所有异常
-@ExceptionHandler(Exception.class)
-@ResponseStatus(HttpStatus.BAD_REQUEST)
-public ResponseBean globalException(HttpServletRequest request, Throwable ex) {
-    return new ResponseBean(getStatus(request).value(), ex.getMessage(), null);
-}
-
-private HttpStatus getStatus(HttpServletRequest request) {
-    Integer statusCode = (Integer) request.getAttribute("javax.servlet.error.status_code");
-    if (statusCode == null) {
-        return HttpStatus.INTERNAL_SERVER_ERROR;
+    // 捕捉shiro的异常
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(ShiroException.class)
+    public ResponseBean handle401(ShiroException e) {
+        return new ResponseBean(401, e.getMessage(), null);
     }
-    return HttpStatus.valueOf(statusCode);
-}
-```
 
+    // 捕捉UnauthorizedException
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseBean handle401() {
+        return new ResponseBean(401, "Unauthorized", null);
+    }
+
+    // 捕捉其他所有异常
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseBean globalException(HttpServletRequest request, Throwable ex) {
+        return new ResponseBean(getStatus(request).value(), ex.getMessage(), null);
+    }
+
+    private HttpStatus getStatus(HttpServletRequest request) {
+        Integer statusCode = (Integer) request.getAttribute("javax.servlet.error.status_code");
+        if (statusCode == null) {
+            return HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+        return HttpStatus.valueOf(statusCode);
+    }
 }
 
 ```
@@ -496,27 +472,24 @@ private HttpStatus getStatus(HttpServletRequest request) {
 ```java
 public class JWTToken implements AuthenticationToken {
 
+    // 密钥
+    private String token;
+
+    public JWTToken(String token) {
+        this.token = token;
+    }
+
+    @Override
+    public Object getPrincipal() {
+        return token;
+    }
+
+    @Override
+    public Object getCredentials() {
+        return token;
+    }
+}
 ```
-// 密钥
-private String token;
-
-public JWTToken(String token) {
-    this.token = token;
-}
-
-@Override
-public Object getPrincipal() {
-    return token;
-}
-
-@Override
-public Object getCredentials() {
-    return token;
-}
-```
-
-}
-​```
 
 ***实现Realm***
 
@@ -526,65 +499,62 @@ public Object getCredentials() {
 @Service
 public class MyRealm extends AuthorizingRealm {
 
+    private static final Logger LOGGER = LogManager.getLogger(MyRealm.class);
+
+    private UserService userService;
+
+    @Autowired
+    public void setUserService(UserService userService) {
+        this.userService = userService;
+    }
+
+    /**
+     * 大坑！，必须重写此方法，不然Shiro会报错
+     */
+    @Override
+    public boolean supports(AuthenticationToken token) {
+        return token instanceof JWTToken;
+    }
+
+    /**
+     * 只有当需要检测用户权限的时候才会调用此方法，例如checkRole,checkPermission之类的
+     */
+    @Override
+    protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
+        String username = JWTUtil.getUsername(principals.toString());
+        UserBean user = userService.getUser(username);
+        SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
+        simpleAuthorizationInfo.addRole(user.getRole());
+        Set<String> permission = new HashSet<>(Arrays.asList(user.getPermission().split(",")));
+        simpleAuthorizationInfo.addStringPermissions(permission);
+        return simpleAuthorizationInfo;
+    }
+
+    /**
+     * 默认使用此方法进行用户名正确与否验证，错误抛出异常即可。
+     */
+    @Override
+    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken auth) throws AuthenticationException {
+        String token = (String) auth.getCredentials();
+        // 解密获得username，用于和数据库进行对比
+        String username = JWTUtil.getUsername(token);
+        if (username == null) {
+            throw new AuthenticationException("token invalid");
+        }
+
+        UserBean userBean = userService.getUser(username);
+        if (userBean == null) {
+            throw new AuthenticationException("User didn't existed!");
+        }
+
+        if (! JWTUtil.verify(token, username, userBean.getPassword())) {
+            throw new AuthenticationException("Username or password error");
+        }
+
+        return new SimpleAuthenticationInfo(token, token, "my_realm");
+    }
+}
 ```
-private static final Logger LOGGER = LogManager.getLogger(MyRealm.class);
-
-private UserService userService;
-
-@Autowired
-public void setUserService(UserService userService) {
-    this.userService = userService;
-}
-
-/**
- * 大坑！，必须重写此方法，不然Shiro会报错
- */
-@Override
-public boolean supports(AuthenticationToken token) {
-    return token instanceof JWTToken;
-}
-
-/**
- * 只有当需要检测用户权限的时候才会调用此方法，例如checkRole,checkPermission之类的
- */
-@Override
-protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-    String username = JWTUtil.getUsername(principals.toString());
-    UserBean user = userService.getUser(username);
-    SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
-    simpleAuthorizationInfo.addRole(user.getRole());
-    Set<String> permission = new HashSet<>(Arrays.asList(user.getPermission().split(",")));
-    simpleAuthorizationInfo.addStringPermissions(permission);
-    return simpleAuthorizationInfo;
-}
-
-/**
- * 默认使用此方法进行用户名正确与否验证，错误抛出异常即可。
- */
-@Override
-protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken auth) throws AuthenticationException {
-    String token = (String) auth.getCredentials();
-    // 解密获得username，用于和数据库进行对比
-    String username = JWTUtil.getUsername(token);
-    if (username == null) {
-        throw new AuthenticationException("token invalid");
-    }
-
-    UserBean userBean = userService.getUser(username);
-    if (userBean == null) {
-        throw new AuthenticationException("User didn't existed!");
-    }
-
-    if (! JWTUtil.verify(token, username, userBean.getPassword())) {
-        throw new AuthenticationException("Username or password error");
-    }
-
-    return new SimpleAuthenticationInfo(token, token, "my_realm");
-}
-```
-
-}
-​```
 
 在`doGetAuthenticationInfo`中用户可以自定义抛出很多异常，详情见文档。
 
@@ -597,89 +567,86 @@ protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken auth) t
 ```java
 public class JWTFilter extends BasicHttpAuthenticationFilter {
 
-```
-private Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+    private Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
-/**
- * 判断用户是否想要登入。
- * 检测header里面是否包含Authorization字段即可
- */
-@Override
-protected boolean isLoginAttempt(ServletRequest request, ServletResponse response) {
-    HttpServletRequest req = (HttpServletRequest) request;
-    String authorization = req.getHeader("Authorization");
-    return authorization != null;
-}
+    /**
+     * 判断用户是否想要登入。
+     * 检测header里面是否包含Authorization字段即可
+     */
+    @Override
+    protected boolean isLoginAttempt(ServletRequest request, ServletResponse response) {
+        HttpServletRequest req = (HttpServletRequest) request;
+        String authorization = req.getHeader("Authorization");
+        return authorization != null;
+    }
 
-/**
- *
- */
-@Override
-protected boolean executeLogin(ServletRequest request, ServletResponse response) throws Exception {
-    HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-    String authorization = httpServletRequest.getHeader("Authorization");
+    /**
+     *
+     */
+    @Override
+    protected boolean executeLogin(ServletRequest request, ServletResponse response) throws Exception {
+        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+        String authorization = httpServletRequest.getHeader("Authorization");
 
-    JWTToken token = new JWTToken(authorization);
-    // 提交给realm进行登入，如果错误他会抛出异常并被捕获
-    getSubject(request, response).login(token);
-    // 如果没有抛出异常则代表登入成功，返回true
-    return true;
-}
+        JWTToken token = new JWTToken(authorization);
+        // 提交给realm进行登入，如果错误他会抛出异常并被捕获
+        getSubject(request, response).login(token);
+        // 如果没有抛出异常则代表登入成功，返回true
+        return true;
+    }
 
-/**
- * 这里我们详细说明下为什么最终返回的都是true，即允许访问
- * 例如我们提供一个地址 GET /article
- * 登入用户和游客看到的内容是不同的
- * 如果在这里返回了false，请求会被直接拦截，用户看不到任何东西
- * 所以我们在这里返回true，Controller中可以通过 subject.isAuthenticated() 来判断用户是否登入
- * 如果有些资源只有登入用户才能访问，我们只需要在方法上面加上 @RequiresAuthentication 注解即可
- * 但是这样做有一个缺点，就是不能够对GET,POST等请求进行分别过滤鉴权(因为我们重写了官方的方法)，但实际上对应用影响不大
- */
-@Override
-protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
-    if (isLoginAttempt(request, response)) {
+    /**
+     * 这里我们详细说明下为什么最终返回的都是true，即允许访问
+     * 例如我们提供一个地址 GET /article
+     * 登入用户和游客看到的内容是不同的
+     * 如果在这里返回了false，请求会被直接拦截，用户看不到任何东西
+     * 所以我们在这里返回true，Controller中可以通过 subject.isAuthenticated() 来判断用户是否登入
+     * 如果有些资源只有登入用户才能访问，我们只需要在方法上面加上 @RequiresAuthentication 注解即可
+     * 但是这样做有一个缺点，就是不能够对GET,POST等请求进行分别过滤鉴权(因为我们重写了官方的方法)，但实际上对应用影响不大
+     */
+    @Override
+    protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
+        if (isLoginAttempt(request, response)) {
+            try {
+                executeLogin(request, response);
+            } catch (Exception e) {
+                response401(request, response);
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 对跨域提供支持
+     */
+    @Override
+    protected boolean preHandle(ServletRequest request, ServletResponse response) throws Exception {
+        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+        HttpServletResponse httpServletResponse = (HttpServletResponse) response;
+        httpServletResponse.setHeader("Access-control-Allow-Origin", httpServletRequest.getHeader("Origin"));
+        httpServletResponse.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS,PUT,DELETE");
+        httpServletResponse.setHeader("Access-Control-Allow-Headers", httpServletRequest.getHeader("Access-Control-Request-Headers"));
+        // 跨域时会首先发送一个option请求，这里我们给option请求直接返回正常状态
+        if (httpServletRequest.getMethod().equals(RequestMethod.OPTIONS.name())) {
+            httpServletResponse.setStatus(HttpStatus.OK.value());
+            return false;
+        }
+        return super.preHandle(request, response);
+    }
+
+    /**
+     * 将非法请求跳转到 /401
+     */
+    private void response401(ServletRequest req, ServletResponse resp) {
         try {
-            executeLogin(request, response);
-        } catch (Exception e) {
-            response401(request, response);
+            HttpServletResponse httpServletResponse = (HttpServletResponse) resp;
+            httpServletResponse.sendRedirect("/401");
+        } catch (IOException e) {
+            LOGGER.error(e.getMessage());
         }
     }
-    return true;
-}
-
-/**
- * 对跨域提供支持
- */
-@Override
-protected boolean preHandle(ServletRequest request, ServletResponse response) throws Exception {
-    HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-    HttpServletResponse httpServletResponse = (HttpServletResponse) response;
-    httpServletResponse.setHeader("Access-control-Allow-Origin", httpServletRequest.getHeader("Origin"));
-    httpServletResponse.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS,PUT,DELETE");
-    httpServletResponse.setHeader("Access-Control-Allow-Headers", httpServletRequest.getHeader("Access-Control-Request-Headers"));
-    // 跨域时会首先发送一个option请求，这里我们给option请求直接返回正常状态
-    if (httpServletRequest.getMethod().equals(RequestMethod.OPTIONS.name())) {
-        httpServletResponse.setStatus(HttpStatus.OK.value());
-        return false;
-    }
-    return super.preHandle(request, response);
-}
-
-/**
- * 将非法请求跳转到 /401
- */
-private void response401(ServletRequest req, ServletResponse resp) {
-    try {
-        HttpServletResponse httpServletResponse = (HttpServletResponse) resp;
-        httpServletResponse.sendRedirect("/401");
-    } catch (IOException e) {
-        LOGGER.error(e.getMessage());
-    }
 }
 ```
-
-}
-​```
 
 `getSubject(request, response).login(token);`这一步就是提交给了`realm`进行处理
 
@@ -689,79 +656,76 @@ private void response401(ServletRequest req, ServletResponse resp) {
 @Configuration
 public class ShiroConfig {
 
-```
-@Bean("securityManager")
-public DefaultWebSecurityManager getManager(MyRealm realm) {
-    DefaultWebSecurityManager manager = new DefaultWebSecurityManager();
-    // 使用自己的realm
-    manager.setRealm(realm);
+    @Bean("securityManager")
+    public DefaultWebSecurityManager getManager(MyRealm realm) {
+        DefaultWebSecurityManager manager = new DefaultWebSecurityManager();
+        // 使用自己的realm
+        manager.setRealm(realm);
 
-    /*
-     * 关闭shiro自带的session，详情见文档
-     * http://shiro.apache.org/session-management.html#SessionManagement-StatelessApplications%28Sessionless%29
+        /*
+         * 关闭shiro自带的session，详情见文档
+         * http://shiro.apache.org/session-management.html#SessionManagement-StatelessApplications%28Sessionless%29
+         */
+        DefaultSubjectDAO subjectDAO = new DefaultSubjectDAO();
+        DefaultSessionStorageEvaluator defaultSessionStorageEvaluator = new DefaultSessionStorageEvaluator();
+        defaultSessionStorageEvaluator.setSessionStorageEnabled(false);
+        subjectDAO.setSessionStorageEvaluator(defaultSessionStorageEvaluator);
+        manager.setSubjectDAO(subjectDAO);
+
+        return manager;
+    }
+
+    @Bean("shiroFilter")
+    public ShiroFilterFactoryBean factory(DefaultWebSecurityManager securityManager) {
+        ShiroFilterFactoryBean factoryBean = new ShiroFilterFactoryBean();
+
+        // 添加自己的过滤器并且取名为jwt
+        Map<String, Filter> filterMap = new HashMap<>();
+        filterMap.put("jwt", new JWTFilter());
+        factoryBean.setFilters(filterMap);
+
+        factoryBean.setSecurityManager(securityManager);
+        factoryBean.setUnauthorizedUrl("/401");
+
+        /*
+         * 自定义url规则
+         * http://shiro.apache.org/web.html#urls-
+         */
+        Map<String, String> filterRuleMap = new HashMap<>();
+        // 所有请求通过我们自己的JWT Filter
+        filterRuleMap.put("/**", "jwt");
+        // 访问401和404页面不通过我们的Filter
+        filterRuleMap.put("/401", "anon");
+        factoryBean.setFilterChainDefinitionMap(filterRuleMap);
+        return factoryBean;
+    }
+
+    /**
+     * 下面的代码是添加注解支持
      */
-    DefaultSubjectDAO subjectDAO = new DefaultSubjectDAO();
-    DefaultSessionStorageEvaluator defaultSessionStorageEvaluator = new DefaultSessionStorageEvaluator();
-    defaultSessionStorageEvaluator.setSessionStorageEnabled(false);
-    subjectDAO.setSessionStorageEvaluator(defaultSessionStorageEvaluator);
-    manager.setSubjectDAO(subjectDAO);
+    @Bean
+    @DependsOn("lifecycleBeanPostProcessor")
+    public DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator() {
+        DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator = new DefaultAdvisorAutoProxyCreator();
+        // 强制使用cglib，防止重复代理和可能引起代理出错的问题
+        // https://zhuanlan.zhihu.com/p/29161098
+        defaultAdvisorAutoProxyCreator.setProxyTargetClass(true);
+        return defaultAdvisorAutoProxyCreator;
+    }
 
-    return manager;
-}
+    @Bean
+    public LifecycleBeanPostProcessor lifecycleBeanPostProcessor() {
+        return new LifecycleBeanPostProcessor();
+    }
 
-@Bean("shiroFilter")
-public ShiroFilterFactoryBean factory(DefaultWebSecurityManager securityManager) {
-    ShiroFilterFactoryBean factoryBean = new ShiroFilterFactoryBean();
-
-    // 添加自己的过滤器并且取名为jwt
-    Map<String, Filter> filterMap = new HashMap<>();
-    filterMap.put("jwt", new JWTFilter());
-    factoryBean.setFilters(filterMap);
-
-    factoryBean.setSecurityManager(securityManager);
-    factoryBean.setUnauthorizedUrl("/401");
-
-    /*
-     * 自定义url规则
-     * http://shiro.apache.org/web.html#urls-
-     */
-    Map<String, String> filterRuleMap = new HashMap<>();
-    // 所有请求通过我们自己的JWT Filter
-    filterRuleMap.put("/**", "jwt");
-    // 访问401和404页面不通过我们的Filter
-    filterRuleMap.put("/401", "anon");
-    factoryBean.setFilterChainDefinitionMap(filterRuleMap);
-    return factoryBean;
-}
-
-/**
- * 下面的代码是添加注解支持
- */
-@Bean
-@DependsOn("lifecycleBeanPostProcessor")
-public DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator() {
-    DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator = new DefaultAdvisorAutoProxyCreator();
-    // 强制使用cglib，防止重复代理和可能引起代理出错的问题
-    // https://zhuanlan.zhihu.com/p/29161098
-    defaultAdvisorAutoProxyCreator.setProxyTargetClass(true);
-    return defaultAdvisorAutoProxyCreator;
-}
-
-@Bean
-public LifecycleBeanPostProcessor lifecycleBeanPostProcessor() {
-    return new LifecycleBeanPostProcessor();
-}
-
-@Bean
-public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(DefaultWebSecurityManager securityManager) {
-    AuthorizationAttributeSourceAdvisor advisor = new AuthorizationAttributeSourceAdvisor();
-    advisor.setSecurityManager(securityManager);
-    return advisor;
+    @Bean
+    public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(DefaultWebSecurityManager securityManager) {
+        AuthorizationAttributeSourceAdvisor advisor = new AuthorizationAttributeSourceAdvisor();
+        advisor.setSecurityManager(securityManager);
+        return advisor;
+    }
 }
 ```
-
-}
-​```
 
 里面URL规则自己参考文档即可http://shiro.apache.org/web.html 。
 
