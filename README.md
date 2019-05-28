@@ -4,25 +4,30 @@
 
 ## 运行效果
 
-localhost:8080/login
+localhost:8080/login   登入
 
 ![](https://raw.githubusercontent.com/gaohanghang/images/master/img20190525161745.png)
 
-localhost:8080/article
+localhost:8080/article   所有人都可以访问，但是用户与游客看到的内容不同
 
 ![](https://raw.githubusercontent.com/gaohanghang/images/master/img20190525162003.png)
 
-localhost:8080/require_auth
+localhost:8080/require_auth   登入的用户才可以进行访问
 
 ![](https://raw.githubusercontent.com/gaohanghang/images/master/img20190525161659.png)
 
-localhost:8080/require_role
+localhost:8080/require_role   admin的角色用户才可以登入
 
 ![](https://raw.githubusercontent.com/gaohanghang/images/master/img20190525161500.png)
 
-localhost:8080/require_permission
+localhost:8080/require_permission   拥有view和edit权限的用户才可以访问
 
 ![](https://raw.githubusercontent.com/gaohanghang/images/master/img20190525161609.png)
+
+localhost:8080/401   未经授权响应效果
+
+![](https://raw.githubusercontent.com/gaohanghang/images/master/img20190528224355.png)
+
 
 ## 序言
 
